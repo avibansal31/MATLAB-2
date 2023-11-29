@@ -1,0 +1,34 @@
+global _start
+
+.section .data
+numbers:
+    .word 0x600000000   @ Address of the sequence
+    .word 0x600000004
+    .word 0x600000008
+    .word 0x60000000C
+    .word 0x600000010
+    .word 0x600000014
+    .word 0x600000018
+    .word 0x60000001C
+
+sum_location:   
+    .word 0x600000009   @ Address to store the sum
+
+carry_location: 
+    .word 0x50000000A   @ Address to store the carry
+
+.section .text
+_start:
+    LDR R0, =numbers    @ Load the address of the numbers array
+    LDR R1, =sum_location    @ Load the address to store the sum
+    LDR R2, =carry_location  @ Load the address to store the carry
+    MOV R3, #0           @ Initialize sum to 0
+    MOV R4, #0           @ Initialize carry to 0
+
+add_loop:
+    LDR R5, [R0], #4     @ Load the next 32-bit number from the array
+    ADC R3, R3, R5       @ Add the number to the sum with carry
+    ADC R4, R4, #0       @ Update carry flag
+
+    SUBS R6, R0, #numbers @ Check if all numbers are processed
+    BNE add_loop         @ If not, continue the
