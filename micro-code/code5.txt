@@ -1,0 +1,30 @@
+assembly
+.global _start
+
+.section .data
+numbers:    .word 0x600000000, 0, 0, 0, 0, 0, 0, 0
+sum:        .word 0x600000009
+carry:      .word 0x50000000A
+
+.section .text
+_start:
+    LDR r0, =numbers   @ Load the address of the numbers array
+    LDR r1, =sum        @ Load the address where the sum will be stored
+    LDR r2, =carry      @ Load the address where the carry will be stored
+
+    MOV r3, #0          @ Initialize a register for the sum
+    MOV r4, #0          @ Initialize a register for the carry
+
+add_loop:
+    LDR r5, [r0], #4    @ Load the next 32-bit number from the array
+    ADC r3, r3, r5      @ Add the number to the sum with carry
+    ADC r4, r4, #0      @ Propagate the carry
+
+    SUBS r6, r0, #numbers @ Check if we've processed all numbers
+    BNE add_loop        @ If not, repeat the loop
+
+    STR r3, [r1]        @ Store the final sum
+    STR r4, [r2]        @ Store the final carry
+
+    MOV r7, #1          @ Exit status
+    SWI 0               @ Invoke software interrupt to exit
