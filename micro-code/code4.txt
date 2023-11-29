@@ -1,0 +1,25 @@
+global _start
+
+_start:
+    ldr r0, =numbers    // Load address of numbers array
+    ldr r1, =sum         // Load address of sum variable
+    ldr r2, =carry       // Load address of carry variable
+    
+    movs r3, #8          // Initialize loop counter
+    
+add_loop:
+    ldr r4, [r0], #4     // Load current number, increment address
+    ldr r5, [r1]         // Load current sum
+    adds r5, r5, r4      // Add current number to sum
+    str r5, [r1]         // Store updated sum
+    
+    ldr r6, [r2]         // Load current carry
+    adds r5, r5, r6      // Add carry to sum
+    mov r6, #0           // Clear carry
+    adc r6, r6, #0       // Update carry
+    str r6, [r2]         // Store updated carry
+    
+    subs r3, r3, #1      // Decrement loop counter
+    bne add_loop         // Repeat until all numbers processed
+    
+    bkpt #0
