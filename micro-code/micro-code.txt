@@ -1,0 +1,13 @@
+MOV R1, #8          // Counter for 8 numbers
+    LDR R2, =0x60000000 // Start address of the numbers
+    MOV R3, #0          // Accumulator for the sum
+    MOV R4, #0          // Accumulator for the carry
+loop:
+    LDR R0, [R2], #4    // Load a number and update the address
+    ADDS R3, R3, R0     // Add the number to the sum
+    ADC R4, R4, #0      // Add the carry (if any) to the carry sum
+    SUBS R1, R1, #1     // Decrement the counter
+    BNE loop            // If the counter is not zero, repeat the loop
+    STR R3, [R2, #4]    // Store the sum
+    STR R4, [R2, #8]    // Store the carry sum
+    BX LR               // Return from main
