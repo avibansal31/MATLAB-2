@@ -1,0 +1,19 @@
+section .text
+global _start
+
+_start:
+    ; Load the first number from memory (0x00000000)
+    mov eax, [0x00000000]
+
+    ; Add the second number
+    add eax, [0x00000004]
+
+    ; Add the third number
+    add eax, [0x00000008]
+
+    ; Save the result at 0x600000009
+    mov [0x60000009], eax
+
+    ; Save the carry at 0x0000000A
+    mov [0x0000000A], 0
+    adc [0x0000000A], 0
