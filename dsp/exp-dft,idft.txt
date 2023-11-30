@@ -1,0 +1,42 @@
+% Function to compute Discrete Fourier Transform (DFT)
+function X = myDFT(x)
+    N = length(x);
+    X = zeros(1, N);
+
+    for k = 1:N
+        X(k) = 0;
+        for n = 1:N
+            X(k) = X(k) + x(n) * exp(-1j * 2 * pi * (k-1) * (n-1) / N);
+        end
+    end
+end
+
+% Function to compute Inverse Discrete Fourier Transform (IDFT)
+function x = myIDFT(X)
+    N = length(X);
+    x = zeros(1, N);
+
+    for n = 1:N
+        x(n) = 0;
+        for k = 1:N
+            x(n) = x(n) + X(k) * exp(1j * 2 * pi * (k-1) * (n-1) / N);
+        end
+        x(n) = x(n) / N;
+    end
+end
+
+% Example usage
+% Replace this sequence with your own
+sequence = [1, 2, 3, 4];
+disp('Original Sequence:');
+disp(sequence);
+
+% Compute DFT
+X = myDFT(sequence);
+disp('DFT:');
+disp(X);
+
+% Compute IDFT
+reconstructed_sequence = myIDFT(X);
+disp('Reconstructed Sequence (IDFT):');
+disp(reconstructed_sequence);
